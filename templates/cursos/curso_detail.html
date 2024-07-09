@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ curso.nome }}</h1>
+
+    <h2>Materiais</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Arquivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in materiais %}
+            <tr>
+                <td>{{ material.nome }}</td>
+                <td>{{ material.descricao }}</td>
+                <td><a href="{{ material.arquivo.url }}" class="btn btn-info btn-sm" target="_blank">Abrir</a></td>
+                <td><a href="{{ material.arquivo.url }}" class="btn btn-info btn-sm" download>Fazer Download</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

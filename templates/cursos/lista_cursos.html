@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Lista de Cursos</h1>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for curso in cursos %}
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                {% if curso.imagem %}
+                <a href="{% url 'curso_detail' curso.pk %}"><img src="{{ curso.imagem.url }}" class="card-img-top" alt="{{ curso.nome }}"></a> 
+                {% else %}
+                <a href="{% url 'curso_detail' curso.pk %}"><img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagem padrão"></a> 
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ curso.nome }}</h5>
+                    <p class="card-text">{{ curso.descricao }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Meus Materiais</h1>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for material in materiais %}
+        <div class="col">
+            <div class="card" style="width: 11rem;">
+                {% if material.curso.imagem %}
+                <img src="{{ material.curso.imagem.url }}" class="card-img-top" alt="{{ material.curso.nome }}">
+                {% else %}
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagem padrão">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ material.nome }}</h5>
+                    <p class="card-text">{{ material.descricao }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ material.arquivo.url }}" class="btn btn-info btn-sm" target="_blank">Abrir</a>
+                    <a href="{{ material.arquivo.url }}" class="btn btn-info btn-sm" download>Download</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
