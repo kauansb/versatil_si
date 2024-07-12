@@ -28,7 +28,7 @@ class CursoDetailView(DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
-        if not request.user.is_superuser and obj not in request.user.cursos.all():
+        if not request.user.is_superuser and not request.user.is_staff and obj not in request.user.cursos.all():
             messages.error(request, "Você não está matriculado neste curso.")
             return redirect('lista_cursos')
         return super().dispatch(request, *args, **kwargs)
