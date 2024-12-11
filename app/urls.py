@@ -1,25 +1,20 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-from materiais.views import CursoListView, CursoDetailView, AlunoMateriaisView
-from matriculas.views import RegisterView, LoginView, LogoutView
+
+from app.views import HomeView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', CursoListView.as_view(), name='lista_cursos'),
+    path('', HomeView.as_view(), name='home'),
 
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login' ),
-    path('logout/', LogoutView.as_view(), name='logout'),
-
-    path('cursos/', CursoListView.as_view(), name='lista_cursos'),
-    path('materiais/', AlunoMateriaisView.as_view(), name='aluno_materiais'),
-    path('cursos/<int:pk>/', CursoDetailView.as_view(), name='curso_detail'),
-
+    path('matriculas/', include('matriculas.urls')),
+    path('materiais/', include('materiais.urls')),
 ]
 
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
