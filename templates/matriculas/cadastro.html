@@ -6,7 +6,7 @@
         <div class="col-md-6">
             <form method="post" class="bg-light p-4 rounded shadow-sm">
                 {% csrf_token %}
-                <h1 class="text-center mb-4">Cadastro</h1>
+                <h1 class="text-center mb-4">Matrícula</h1>
                 {% for field in user_form %}
                 <div class="mb-3">
                     {{ field.label_tag }}

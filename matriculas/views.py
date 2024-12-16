@@ -2,14 +2,18 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.decorators import method_decorator
 from .forms import AlunoCreationForm, EmailAuthenticationForm
 
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(permission_required('matriculas.add_matricula', raise_exception=True), name='dispatch')
 class RegisterView(View):
 
     def get(self, request):
         user_form = AlunoCreationForm()
-        return render(request, 'contas/cadastro.html', {'user_form': user_form})
+        return render(request, 'matriculas/cadastro.html', {'user_form': user_form})
 
     def post(self, request):
         user_form = AlunoCreationForm(request.POST)
@@ -30,14 +34,14 @@ class RegisterView(View):
                 field_name = friendly_field_names.get(field, field)  # Obtém o rótulo amigável ou usa o nome do campo
                 for error in errors:
                     messages.error(request, f"{field_name}: {error}")
-            return render(request, 'contas/cadastro.html', {'user_form': user_form})
+            return render(request, 'matriculas/cadastro.html', {'user_form': user_form})
 
 
 class LoginView(View):
 
     def get(self, request):
         login_form = EmailAuthenticationForm()
-        return render(request, 'contas/login.html', {'login_form': login_form})
+        return render(request, 'matriculas/login.html', {'login_form': login_form})
 
     def post(self, request):
         login_form = EmailAuthenticationForm(data=request.POST)
@@ -51,7 +55,7 @@ class LoginView(View):
                 messages.error(request, 'Usuário ou senha incorretos. Tente novamente.')
                 login_form = EmailAuthenticationForm(data=request.POST)
         messages.error(request, 'Usuário ou senha incorretos. Tente novamente.')
-        return render(request, 'contas/login.html', {'login_form': login_form})
+        return render(request, 'matriculas/login.html', {'login_form': login_form})
 
 class LogoutView(View):
 

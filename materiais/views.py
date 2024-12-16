@@ -9,21 +9,21 @@ from .forms import MaterialForm
 
 class CursoListView(ListView):
     model = Curso
-    template_name = 'cursos/lista_cursos.html'
+    template_name = 'materiais/lista_cursos.html'
     context_object_name = 'cursos'
 
-    def get_queryset(self):
-        queryset = super().get_queryset().order_by('nome')
-        search = self.request.GET.get('search')
-        if search:
-            queryset = queryset.filter(nome__icontains=search)
-        return queryset
+    #def get_queryset(self):
+    #    queryset = super().get_queryset().order_by('nome')
+    #    search = self.request.GET.get('search')
+    #    if search:
+    #        queryset = queryset.filter(nome__icontains=search)
+    #    return queryset
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class CursoDetailView(DetailView):
     model = Curso
-    template_name = 'cursos/curso_detail.html'
+    template_name = 'materiais/curso_detail.html'
     context_object_name = 'curso'
 
     def dispatch(self, request, *args, **kwargs):
@@ -38,22 +38,4 @@ class CursoDetailView(DetailView):
         # Filtra os materiais apenas para o curso específico
         context['materiais'] = Material.objects.filter(curso=self.object)
         context['material_form'] = MaterialForm(initial={'curso': self.object})
-        return context
-
-
-# View para o aluno visualizar os materiais do curso em que está matriculado
-class AlunoMateriaisView(ListView):
-    model = Material
-    template_name = 'cursos/aluno_materiais.html'
-    context_object_name = 'materiais'
-
-    def get_queryset(self):
-        # Filtra os materiais apenas para os cursos que o aluno está matriculado
-        aluno = self.request.user
-        cursos = aluno.cursos.all()
-        return Material.objects.filter(curso__in=cursos)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['cursos'] = {curso.id: curso for curso in self.request.user.cursos.all()}
         return context

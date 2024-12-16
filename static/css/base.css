@@ -1,0 +1,20 @@
+/* Garante que o container principal ocupe a altura total */
+.main-container {
+  min-height: 100vh; /* Ocupa ao menos toda a viewport */
+}
+.sidebar {
+  width: 280px; /* Largura fixa */
+  background-color: #343a40; /* Cor do fundo escuro */
+  color: white;
+}
+/* Estiliza o botão de recolher para alinhar com o topo */
+.sidebar-toggle {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 1030; /* Fica acima do conteúdo */
+}
+.content {
+  flex-grow: 1; /* Faz o conteúdo principal expandir */
+  padding: 20px;
+}
