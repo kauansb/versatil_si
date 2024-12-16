@@ -17,6 +17,10 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('O email deve ser fornecido')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
+        
+        # Define a senha padrão se nenhuma for fornecida
+        if not password:
+            password = "senha123"  # Defina sua senha padrão aqui
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -28,12 +32,14 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     nome = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     cursos = models.ManyToManyField(Curso, through='Matricula')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    alterou_senha = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 

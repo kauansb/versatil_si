@@ -4,6 +4,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.decorators import method_decorator
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
+from django.contrib.auth.models import update_last_login
 from .forms import AlunoCreationForm, EmailAuthenticationForm
 
 
@@ -12,26 +15,27 @@ from .forms import AlunoCreationForm, EmailAuthenticationForm
 class RegisterView(View):
 
     def get(self, request):
+        # Instancia o formulário vazio
         user_form = AlunoCreationForm()
         return render(request, 'matriculas/cadastro.html', {'user_form': user_form})
 
     def post(self, request):
         user_form = AlunoCreationForm(request.POST)
         if user_form.is_valid():
+            # Salva o formulário e cria o usuário
             user_form.save()
-            messages.success(request, 'Registro realizado com sucesso! Faça login para continuar.')
-            return redirect('login')
+            messages.success(request, 'Registro realizado com sucesso! O aluno pode usar a senha padrão "senha123" para login.')
+            return redirect('login')  # Redireciona para a página de login após o registro
         else:
+            # Mensagens de erro detalhadas com rótulos amigáveis
             friendly_field_names = {
-                'username': 'Nome de usuário',
+                'nome': 'Nome',
                 'email': 'Email',
                 'password1': 'Senha',
-                'password2': 'Confirmação de senha',
-                'curso': 'Curso'
+                'curso': 'Cursos'
             }
-            # Adicionando mensagens de erro detalhadas com rótulos amigáveis
             for field, errors in user_form.errors.items():
-                field_name = friendly_field_names.get(field, field)  # Obtém o rótulo amigável ou usa o nome do campo
+                field_name = friendly_field_names.get(field, field)  # Rótulo amigável ou nome do campo
                 for error in errors:
                     messages.error(request, f"{field_name}: {error}")
             return render(request, 'matriculas/cadastro.html', {'user_form': user_form})
@@ -63,3 +67,13 @@ class LogoutView(View):
         logout(request)
         messages.success(request, 'Logout efetuado com sucesso!')
         return redirect('login')
+
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'usuario/alterar_senha.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.request.user.alterou_senha = True
+        self.request.user.save()
+        return response

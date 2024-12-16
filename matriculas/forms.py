@@ -1,15 +1,24 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Curso, Matricula
 
 
-class AlunoCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-    curso = forms.ModelMultipleChoiceField(queryset=Curso.objects.all(), widget=forms.CheckboxSelectMultiple)
+class AlunoCreationForm(forms.ModelForm):
+    email = forms.EmailField(required=True, label="Email")
+    curso = forms.ModelMultipleChoiceField(
+        queryset=Curso.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Cursos"
+    )
+    password1 = forms.CharField(
+        required=False,  # Torna o campo de senha opcional
+        widget=forms.PasswordInput,
+        label="Senha (opcional)"
+    )
 
     class Meta:
         model = User
-        fields = ("nome", "email", "password1", "password2", "curso")
+        fields = ("nome", "email", "curso", "password1")  # Remove password2
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -20,6 +29,14 @@ class AlunoCreationForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
+
+        # Define uma senha padrão se o campo password1 estiver vazio
+        senha = self.cleaned_data.get("password1")
+        if senha:
+            user.set_password(senha)
+        else:
+            user.set_password("senha123")  # Senha padrão
+
         if commit:
             user.save()
             cursos = self.cleaned_data["curso"]
