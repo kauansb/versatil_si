@@ -8,14 +8,6 @@
                 {% csrf_token %}
                 <h1 class="text-center mb-4">Cadastro de Aluno</h1>
                 
-                {% if messages %}
-                <ul class="list-unstyled">
-                    {% for message in messages %}
-                    <li class="alert {{ message.tags }}">{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-                
                 {% for field in user_form %}
                 <div class="mb-3">
                     {{ field.label_tag }}

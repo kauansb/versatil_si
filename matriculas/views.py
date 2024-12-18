@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
+from django.views.generic import ListView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
@@ -7,7 +8,34 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from .forms import AlunoCreationForm, EmailAuthenticationForm
+from .models import Matricula
 
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(permission_required('matriculas.add_matricula', raise_exception=True), name='dispatch')
+class MatriculaListView(ListView):
+    model = Matricula
+    template_name = 'matriculas/lista_matriculas.html'
+    context_object_name = 'matriculas'
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        aluno = self.request.GET.get('aluno')
+        curso = self.request.GET.get('curso')
+        data_inicio = self.request.GET.get('data_inicio')
+        data_fim = self.request.GET.get('data_fim')
+
+        if aluno:
+            queryset = queryset.filter(aluno__nome__icontains=aluno)
+        if curso:
+            queryset = queryset.filter(curso__nome__icontains=curso)
+        if data_inicio:
+            queryset = queryset.filter(data_matricula__gte=data_inicio)
+        if data_fim:
+            queryset = queryset.filter(data_matricula__lte=data_fim)
+
+        return queryset
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(permission_required('matriculas.add_matricula', raise_exception=True), name='dispatch')
@@ -24,7 +52,7 @@ class RegisterView(View):
             # Salva o formulário e cria o usuário
             user_form.save()
             messages.success(request, 'Registro realizado com sucesso! O aluno pode usar a senha padrão "senha123" para login.')
-            return redirect('login')  # Redireciona para a página de login após o registro
+            return redirect('register')  # Redireciona para a página de login após o registro
         else:
             # Mensagens de erro detalhadas com rótulos amigáveis
             friendly_field_names = {

@@ -25,6 +25,11 @@ class AlunoCreationForm(forms.ModelForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('Email já está em uso.')
         return email
+    def clean_nome(self):
+        nome = self.cleaned_data.get('nome')
+        if User.objects.filter(nome=nome).exists():
+            raise forms.ValidationError('Nome já está em uso.')
+        return nome
 
     def save(self, commit=True):
         user = super().save(commit=False)

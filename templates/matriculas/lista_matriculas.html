@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Lista de Matrículas</h1>
+
+    <!-- Formulário de Filtro -->
+    <form class="mb-4" method="GET" action="{% url 'lista_matriculas' %}">
+        <div class="row">
+            <div class="col-md-3">
+                <input class="form-control" type="text" name="aluno" placeholder="Buscar por aluno" value="{{ request.GET.aluno }}">
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" type="text" name="curso" placeholder="Buscar por curso" value="{{ request.GET.curso }}">
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" type="date" name="data_inicio" placeholder="Data de início" value="{{ request.GET.data_inicio }}">
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" type="date" name="data_fim" placeholder="Data de fim" value="{{ request.GET.data_fim }}">
+            </div>
+        </div>
+        <button class="btn btn-primary mt-2" type="submit">Filtrar</button>
+    </form>
+
+    <!-- Tabela de Matrículas -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Aluno</th>
+                <th>Curso</th>
+                <th>Data de Matrícula</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for matricula in matriculas %}
+            <tr>
+                <td>{{ matricula.aluno.nome }}</td>
+                <td>{{ matricula.curso.nome }}</td>
+                <td>{{ matricula.data_matricula }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center">Nenhuma matrícula encontrada.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Paginação -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+            {% endif %}
+
+            {% for num in paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item">
+                <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}" aria-label="Próximo">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+</div>
+{% endblock %}
