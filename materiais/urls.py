@@ -4,5 +4,5 @@ from .views import CursoListView, CursoDetailView
 
 urlpatterns = [
     path('', CursoListView.as_view(), name='lista_cursos'),
-    path('cursos/<int:pk>/', CursoDetailView.as_view(), name='curso_detail'),
+    path('<slug:slug>/', CursoDetailView.as_view(), name='curso_detail'),
 ]

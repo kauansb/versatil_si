@@ -1,10 +1,18 @@
 from django.db import models
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils.text import slugify
 
 
 class Curso(models.Model):
     nome = models.CharField(max_length=120)
     imagem = models.ImageField(upload_to='cursos/', blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.nome)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nome

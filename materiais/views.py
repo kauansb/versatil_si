@@ -25,6 +25,8 @@ class CursoDetailView(DetailView):
     model = Curso
     template_name = 'materiais/curso_detail.html'
     context_object_name = 'curso'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
 
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()

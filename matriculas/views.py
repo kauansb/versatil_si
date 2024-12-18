@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
-from django.contrib.auth.models import update_last_login
 from .forms import AlunoCreationForm, EmailAuthenticationForm
 
 
