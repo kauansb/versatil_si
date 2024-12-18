@@ -12,12 +12,12 @@ class CursoListView(ListView):
     template_name = 'materiais/lista_cursos.html'
     context_object_name = 'cursos'
 
-    #def get_queryset(self):
-    #    queryset = super().get_queryset().order_by('nome')
-    #    search = self.request.GET.get('search')
-    #    if search:
-    #        queryset = queryset.filter(nome__icontains=search)
-    #    return queryset
+    def get_queryset(self):
+        queryset = super().get_queryset().order_by('nome')
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(nome__icontains=search)
+        return queryset
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')

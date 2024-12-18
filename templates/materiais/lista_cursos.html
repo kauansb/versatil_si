@@ -4,14 +4,21 @@
 <div class="container mt-5">
     <h1 class="mb-4">Lista de Cursos</h1>
 
+    <form class="d-flex mb-4 m-2" method="GET" action="{% url 'lista_cursos' %}">
+        <div class="row">
+            <input class="form-control" type="text" name="search" placeholder="Buscar cursos" value="{{ request.GET.search }}">
+        </div>
+        <button class="btn btn-primary" type="submit">Buscar</button>
+    </form>
+
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for curso in cursos %}
         <div class="col">
-            <div class="card" style="width: 15rem;">
+            <div class="card" style="width: 14rem;">
                 {% if curso.imagem %}
                 <a href="{% url 'curso_detail' slug=curso.slug %}"><img src="{{ curso.imagem.url }}" class="card-img-top" alt="{{ curso.nome }}"></a> 
                 {% else %}
-                <a href="{% url 'curso_detail' slug=curso.slug %}"><img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagem padrão"></a> 
+                <a href="{% url 'curso_detail' slug=curso.slug %}"><img src="https://via.placeholder.com/150" class="card-img-top" alt="{{ curso.nome }}"></a> 
                 {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ curso.nome }}</h5>
