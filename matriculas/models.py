@@ -2,12 +2,14 @@ from django.db import models
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.text import slugify
+from datetime import timedelta
 
 
 class Curso(models.Model):
     nome = models.CharField(max_length=120)
     imagem = models.ImageField(upload_to='cursos/', blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
+    duracao_meses = models.PositiveIntegerField(default=6)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -63,5 +65,9 @@ class Matricula(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     data_matricula = models.DateField(auto_now_add=True)
 
+    @property
+    def data_fim(self):
+        return self.data_matricula + timedelta(days=self.curso.duracao_meses * 30)
+    
     def __str__(self):
         return f'{self.aluno.nome} - {self.curso.nome}'

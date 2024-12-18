@@ -12,7 +12,7 @@ from .models import Matricula
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(permission_required('matriculas.add_matricula', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('user.is_staff', raise_exception=True), name='dispatch')
 class MatriculaListView(ListView):
     model = Matricula
     template_name = 'matriculas/lista_matriculas.html'
@@ -33,7 +33,7 @@ class MatriculaListView(ListView):
         if data_inicio:
             queryset = queryset.filter(data_matricula__gte=data_inicio)
         if data_fim:
-            queryset = queryset.filter(data_matricula__lte=data_fim)
+            queryset = queryset.filter(data_fim__lte=data_fim)
 
         return queryset
 

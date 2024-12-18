@@ -31,6 +31,7 @@
                 <th>Aluno</th>
                 <th>Curso</th>
                 <th>Data de Matrícula</th>
+                <th>Data de Fim</th>
             </tr>
         </thead>
         <tbody>
@@ -39,6 +40,7 @@
                 <td>{{ matricula.aluno.nome }}</td>
                 <td>{{ matricula.curso.nome }}</td>
                 <td>{{ matricula.data_matricula }}</td>
+                <td>{{ matricula.data_fim }}</td>
             </tr>
             {% empty %}
             <tr>
