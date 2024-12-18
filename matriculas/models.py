@@ -70,4 +70,4 @@ class Matricula(models.Model):
         return self.data_matricula + timedelta(days=self.curso.duracao_meses * 30)
     
     def __str__(self):
-        return f'{self.aluno.nome} - {self.curso.nome}'
+        return f'{self.aluno.nome}'

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
@@ -16,7 +17,9 @@ class CursoListView(ListView):
         queryset = super().get_queryset().order_by('nome')
         search = self.request.GET.get('search')
         if search:
-            queryset = queryset.filter(nome__icontains=search)
+            queryset = queryset.filter(
+                Q(nome__icontains=search)
+            ).distinct()
         return queryset
 
 

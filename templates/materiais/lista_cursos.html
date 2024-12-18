@@ -4,29 +4,61 @@
 <div class="container mt-5">
     <h1 class="mb-4">Lista de Cursos</h1>
 
-    <form class="d-flex mb-4 m-2" method="GET" action="{% url 'lista_cursos' %}">
-        <div class="row">
-            <input class="form-control" type="text" name="search" placeholder="Buscar cursos" value="{{ request.GET.search }}">
+    <!-- Formulário de Busca -->
+    <form class="d-flex mb-4" method="GET" action="{% url 'lista_cursos' %}">
+        <div class="row w-100">
+            <div class="col-9">
+                <input 
+                    class="form-control" 
+                    type="text" 
+                    name="search" 
+                    placeholder="Buscar cursos..." 
+                    value="{{ request.GET.search }}">
+            </div>
+            <div class="col-3 d-flex">
+                <button class="btn btn-primary w-100 me-2" type="submit">Buscar</button>
+                <a href="{% url 'lista_cursos' %}" class="btn btn-secondary w-100">Limpar</a>
+            </div>
         </div>
-        <button class="btn btn-primary" type="submit">Buscar</button>
     </form>
 
+    <!-- Lista de Cursos -->
+    {% if cursos %}
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for curso in cursos %}
         <div class="col">
-            <div class="card" style="width: 14rem;">
+            <div class="card h-100">
+                <!-- Imagem do Curso -->
                 {% if curso.imagem %}
-                <a href="{% url 'curso_detail' slug=curso.slug %}"><img src="{{ curso.imagem.url }}" class="card-img-top" alt="{{ curso.nome }}"></a> 
+                <a href="{% url 'curso_detail' slug=curso.slug %}">
+                    <img src="{{ curso.imagem.url }}" class="card-img-top" alt="{{ curso.nome }}">
+                </a>
                 {% else %}
-                <a href="{% url 'curso_detail' slug=curso.slug %}"><img src="https://via.placeholder.com/150" class="card-img-top" alt="{{ curso.nome }}"></a> 
+                <a href="{% url 'curso_detail' slug=curso.slug %}">
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="{{ curso.nome }}">
+                </a>
                 {% endif %}
+
+                <!-- Informações do Curso -->
                 <div class="card-body">
-                    <h5 class="card-title">{{ curso.nome }}</h5>
-                    <p class="card-text">{{ curso.descricao }}</p>
+                    <h5 class="card-title">
+                        <a href="{% url 'curso_detail' slug=curso.slug %}" class="text-decoration-none text-dark">
+                            {{ curso.nome }}
+                        </a>
+                    </h5>
+                    <p class="card-text">
+                        {{ curso.descricao|truncatechars:100 }}
+                    </p>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
+    {% else %}
+    <!-- Caso Não Haja Cursos -->
+    <div class="alert alert-warning mt-4 text-center" role="alert">
+        Nenhum curso encontrado. Tente outra busca.
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

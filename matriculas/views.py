@@ -42,19 +42,16 @@ class MatriculaListView(ListView):
 class RegisterView(View):
 
     def get(self, request):
-        # Instancia o formulário vazio
         user_form = AlunoCreationForm()
         return render(request, 'matriculas/cadastro.html', {'user_form': user_form})
 
     def post(self, request):
         user_form = AlunoCreationForm(request.POST)
         if user_form.is_valid():
-            # Salva o formulário e cria o usuário
             user_form.save()
             messages.success(request, 'Registro realizado com sucesso! O aluno pode usar a senha padrão "senha123" para login.')
             return redirect('register')  # Redireciona para a página de login após o registro
         else:
-            # Mensagens de erro detalhadas com rótulos amigáveis
             friendly_field_names = {
                 'nome': 'Nome',
                 'email': 'Email',
@@ -66,6 +63,7 @@ class RegisterView(View):
                 for error in errors:
                     messages.error(request, f"{field_name}: {error}")
             return render(request, 'matriculas/cadastro.html', {'user_form': user_form})
+
 
 
 class LoginView(View):

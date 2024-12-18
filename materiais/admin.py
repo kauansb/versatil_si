@@ -1,9 +1,8 @@
 from django.contrib import admin
-from materiais.models import Material
+from .models import Material
 
-
+@admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ('curso','nome','descricao','arquivo')
-    search_fields = ('nome',)
-
-admin.site.register(Material, MaterialAdmin)
+    list_display = ('nome', 'curso', 'combo', 'tipo', 'ativo', 'created_at', 'updated_at')
+    list_filter = ('ativo', 'tipo', 'curso', 'combo', 'created_at')
+    search_fields = ('nome', 'descricao', 'curso__nome')

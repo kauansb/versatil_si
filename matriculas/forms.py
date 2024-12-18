@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User, Curso, Matricula
+from .models import User, Curso, Matricula, Combo
 
 
 class AlunoCreationForm(forms.ModelForm):
@@ -10,6 +10,7 @@ class AlunoCreationForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         label="Cursos"
     )
+
     password1 = forms.CharField(
         required=False,  # Torna o campo de senha opcional
         widget=forms.PasswordInput,
@@ -18,18 +19,13 @@ class AlunoCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("nome", "email", "curso", "password1")  # Remove password2
+        fields = ("nome", "email", "curso", "password1")
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('Email já está em uso.')
         return email
-    def clean_nome(self):
-        nome = self.cleaned_data.get('nome')
-        if User.objects.filter(nome=nome).exists():
-            raise forms.ValidationError('Nome já está em uso.')
-        return nome
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -44,7 +40,9 @@ class AlunoCreationForm(forms.ModelForm):
 
         if commit:
             user.save()
-            cursos = self.cleaned_data["curso"]
+
+            # Matrícula nos cursos individuais
+            cursos = self.cleaned_data.get("curso")
             for curso in cursos:
                 Matricula.objects.create(aluno=user, curso=curso)
         return user

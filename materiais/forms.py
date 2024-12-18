@@ -19,8 +19,25 @@ class CursoForm(forms.ModelForm):
 class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
-        fields = ['nome', 'descricao', 'arquivo', 'curso']
+        fields = ['nome', 'descricao', 'tipo', 'arquivo', 'curso', 'ativo']
         widgets = {
-            'curso': forms.HiddenInput(),
-            'descricao': forms.Textarea(attrs={'cols': 50, 'rows': 3}),  # Define o tamanho do textarea
+            'descricao': forms.Textarea(attrs={'cols': 50, 'rows': 3}),
+            'tipo': forms.Select(),
         }
+
+    def clean_arquivo(self):
+        arquivo = self.cleaned_data.get('arquivo')
+        if arquivo:
+            # Restrição para arquivos de tamanho até 10 MB
+            if arquivo.size > 10 * 1024 * 1024:
+                raise forms.ValidationError('O arquivo deve ter no máximo 10MB.')
+        return arquivo
+
+    def clean(self):
+        cleaned_data = super().clean()
+        curso = cleaned_data.get('curso')
+
+        # Valida se pelo menos um curso foi selecionado
+        if not curso:
+            raise forms.ValidationError('Você deve selecionar um curso ou um combo.')
+        return cleaned_data

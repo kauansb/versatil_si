@@ -7,7 +7,8 @@
             <form method="post" class="bg-light p-4 rounded shadow-sm" novalidate>
                 {% csrf_token %}
                 <h1 class="text-center mb-4">Matricula</h1>
-                
+
+                <!-- Campos do formulário -->
                 {% for field in user_form %}
                 <div class="mb-3">
                     {{ field.label_tag }}
@@ -23,7 +24,7 @@
                     {% endif %}
                 </div>
                 {% endfor %}
-                
+
                 <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
             </form>
         </div>
