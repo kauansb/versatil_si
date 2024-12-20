@@ -29,6 +29,8 @@ INSTALLED_APPS = [
 
     'matriculas',
     'materiais',
+    
+    'widget_tweaks',
 
 ]
 

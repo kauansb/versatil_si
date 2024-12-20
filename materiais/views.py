@@ -44,3 +44,16 @@ class CursoDetailView(DetailView):
         context['materiais'] = Material.objects.filter(curso=self.object)
         context['material_form'] = MaterialForm(initial={'curso': self.object})
         return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = MaterialForm(request.POST, request.FILES)
+        if form.is_valid():
+            material = form.save(commit=False)
+            material.curso = self.object
+            material.save()
+            messages.success(request, "Material adicionado com sucesso.")
+            return redirect('curso_detail', slug=self.object.slug)
+        else:
+            messages.error(request, "Erro ao adicionar material.")
+        return self.render_to_response(self.get_context_data(material_form=form))

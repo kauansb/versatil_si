@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% load widget_tweaks %}
+
 <div class="container mt-5">
     <h1>{{ curso.nome }}</h1>
 
@@ -10,6 +12,7 @@
             <tr>
                 <th>Nome</th>
                 <th>Descrição</th>
+                <th>Tipo</th>
                 <th>Arquivo</th>
             </tr>
         </thead>
@@ -18,19 +21,48 @@
             <tr>
                 <td>{{ material.nome }}</td>
                 <td>{{ material.descricao }}</td>
+                <td>{{ material.get_tipo_display }}</td>
                 <td><a href="{{ material.arquivo.url }}" class="btn btn-info btn-sm" target="_blank">Abrir</a></td>
-                <td>
-                    <a href="{{ material.arquivo.url }}" class="btn btn-info btn-sm" download>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
-                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
-                        </svg>
-                    </a>
-                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
+    <button id="add-material-btn" class="btn btn-primary mt-4">Adicionar Material</button>
+
+    <div id="add-material-form" class="mt-4" style="display: none;">
+        <h2>Adicionar Material</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_nome" class="form-label">{{ material_form.nome.label }}</label>
+                {{ material_form.nome|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                <label for="id_descricao" class="form-label">{{ material_form.descricao.label }}</label>
+                {{ material_form.descricao|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                <label for="id_tipo" class="form-label">{{ material_form.tipo.label }}</label>
+                {{ material_form.tipo|add_class:"form-select" }}
+            </div>
+            <div class="mb-3">
+                <label for="id_arquivo" class="form-label">{{ material_form.arquivo.label }}</label>
+                {{ material_form.arquivo|add_class:"form-control" }}
+            </div>
+            <button type="submit" class="btn btn-primary">Adicionar</button>
+        </form>
+    </div>
 </div>
+
+<script>
+    document.getElementById('add-material-btn').addEventListener('click', function() {
+        var form = document.getElementById('add-material-form');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    });
+</script>
 {% endblock %}
