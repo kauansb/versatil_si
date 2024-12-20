@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User, Curso, Matricula, Combo
+from .models import User, Curso, Matricula
 
 
 class AlunoCreationForm(forms.ModelForm):

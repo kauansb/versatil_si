@@ -39,5 +39,5 @@ class MaterialForm(forms.ModelForm):
 
         # Valida se pelo menos um curso foi selecionado
         if not curso:
-            raise forms.ValidationError('Você deve selecionar um curso ou um combo.')
+            raise forms.ValidationError('Você deve selecionar um curso.')
         return cleaned_data
