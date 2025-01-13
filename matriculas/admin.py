@@ -18,11 +18,11 @@ class UserAdmin(admin.ModelAdmin):
     model = User
     list_display = ('nome', 'email', 'is_active', 'is_staff', 'is_guest')  # Adicionados campos relevantes
     search_fields = ('nome', 'email')  # Permite pesquisar por nome e email
-    list_filter = ('is_active', 'is_staff', 'is_guest')  # Filtros para status do usuário
+    list_filter = ('is_active', 'is_staff', 'is_guest', 'alterou_senha')  # Filtros para status do usuário
     ordering = ('email',)  # Ordena por email
     fieldsets = (
         (None, {'fields': ('nome', 'email', 'password')}),
-        ('Permissões', {'fields': ('is_active', 'is_staff', 'is_guest', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Permissões', {'fields': ('is_active', 'is_staff', 'is_guest', 'is_superuser','alterou_senha', 'groups', 'user_permissions')}),
         ('Datas importantes', {'fields': ('last_login',)}),
     )
     add_fieldsets = (

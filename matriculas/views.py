@@ -81,8 +81,8 @@ class LoginView(View):
         if login_form.is_valid():
             user = authenticate(
                 request,
-                username=login_form.cleaned_data['username'],  # Deve ser "username"
-                password=login_form.cleaned_data['password']   # Deve ser "password"
+                username=login_form.cleaned_data['username'],
+                password=login_form.cleaned_data['password']
             )
             if user is not None:
                 login(request, user)  # Realiza o login do usuário
