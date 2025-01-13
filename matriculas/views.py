@@ -6,13 +6,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.views import PasswordChangeView
+from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
 from .forms import AlunoCreationForm, EmailAuthenticationForm
 from .models import Matricula
-
+from django.http import HttpResponseForbidden
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(permission_required('user.is_staff', raise_exception=True), name='dispatch')
 class MatriculaListView(ListView):
     model = Matricula
     template_name = 'matriculas/lista_matriculas.html'
@@ -36,6 +36,11 @@ class MatriculaListView(ListView):
             queryset = queryset.filter(data_fim__lte=data_fim)
 
         return queryset
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
+        return super().dispatch(request, *args, **kwargs)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(permission_required('matriculas.add_matricula', raise_exception=True), name='dispatch')
