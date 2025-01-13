@@ -26,8 +26,8 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError('O email deve ser fornecido')
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        
+        user = self.model(email=email, is_active=True, **extra_fields)
+ 
         # Define a senha padrão se nenhuma for fornecida
         if not password:
             password = "senha123"  # Defina sua senha padrão aqui
@@ -50,11 +50,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     alterou_senha = models.BooleanField(default=False)
+    is_guest = models.BooleanField(default=False)  # Usuário convidado ou especial
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nome']
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.password:  # Apenas para novos usuários
+            self.set_password("senha123")  # Define uma senha padrão
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nome

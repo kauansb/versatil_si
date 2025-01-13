@@ -19,7 +19,7 @@ class CursoForm(forms.ModelForm):
 class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
-        fields = ['nome', 'descricao', 'tipo', 'arquivo', 'ativo']
+        fields = ['nome', 'descricao', 'tipo', 'arquivo']
         widgets = {
             'descricao': forms.Textarea(attrs={'cols': 50, 'rows': 3}),
             'tipo': forms.Select(),

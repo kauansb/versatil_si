@@ -67,7 +67,6 @@ class RegisterView(View):
 
 
 class LoginView(View):
-
     def get(self, request):
         login_form = EmailAuthenticationForm()
         return render(request, 'matriculas/login.html', {'login_form': login_form})
@@ -75,16 +74,33 @@ class LoginView(View):
     def post(self, request):
         login_form = EmailAuthenticationForm(data=request.POST)
         if login_form.is_valid():
-            user = authenticate(request, username=login_form.cleaned_data['username'], password=login_form.cleaned_data['password'])
+            user = authenticate(
+                request,
+                username=login_form.cleaned_data['username'],  # Deve ser "username"
+                password=login_form.cleaned_data['password']   # Deve ser "password"
+            )
             if user is not None:
-                login(request, user)
+                login(request, user)  # Realiza o login do usuário
                 messages.success(request, 'Login efetuado com sucesso!')
-                return redirect('lista_cursos')
+
+                # Redirecione conforme o tipo de usuário
+                if user.is_superuser or user.is_staff:
+                    return redirect('lista_matriculas')  # Página para admin/staff
+                elif Matricula.objects.filter(aluno=user).exists():
+                    return redirect('lista_cursos')  # Página para usuários matriculados
+                else:
+                    return redirect('home')  # Página padrão para outros casos
             else:
-                messages.error(request, 'Usuário ou senha incorretos. Tente novamente.')
-                login_form = EmailAuthenticationForm(data=request.POST)
-        messages.error(request, 'Usuário ou senha incorretos. Tente novamente.')
+                messages.error(request, 'Usuário ou senha incorretos.')
+        else:
+            # Exibe erros específicos do formulário
+            for field, errors in login_form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+
         return render(request, 'matriculas/login.html', {'login_form': login_form})
+
+
 
 class LogoutView(View):
 

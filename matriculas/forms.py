@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from .models import User, Curso, Matricula
 
 
@@ -50,3 +50,39 @@ class AlunoCreationForm(forms.ModelForm):
 
 class EmailAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(label="Email")  # Usa o campo de email como username
+    
+    def confirm_login_allowed(self, user):
+        if not user.is_active:
+            raise forms.ValidationError("Esta conta está inativa.", code="inactive")
+
+        # Permite login para usuários staff ou admin
+        if user.is_staff or user.is_superuser:
+            return
+        
+        # Permite login para usuários com matrícula
+        if Matricula.objects.filter(aluno=user).exists():
+            return
+        
+        # Caso especial: usuários sem matrícula
+        # Você pode adicionar lógica aqui para verificar outros critérios
+        if getattr(user, "is_guest", False):  # Exemplo: campo is_guest
+            return
+        
+        raise forms.ValidationError("Você não está matriculado em nenhum curso ou autorizado a acessar.", code="no_matricula")
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('email', 'nome')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password1"])  # Garante que a senha seja encriptada
+        if commit:
+            user.save()
+        return user
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ('email', 'nome', 'is_active', 'is_staff')

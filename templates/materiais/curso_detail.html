@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% load static %}
 {% load widget_tweaks %}
 
 <div class="container mt-5">
@@ -27,7 +28,7 @@
             {% endfor %}
         </tbody>
     </table>
-
+    {% if perms.materiais.add_material %}
     <button id="add-material-btn" class="btn btn-primary mt-4">Adicionar Material</button>
 
     <div id="add-material-form" class="mt-4" style="display: none;">
@@ -54,15 +55,7 @@
         </form>
     </div>
 </div>
+{% endif %}
 
-<script>
-    document.getElementById('add-material-btn').addEventListener('click', function() {
-        var form = document.getElementById('add-material-form');
-        if (form.style.display === 'none') {
-            form.style.display = 'block';
-        } else {
-            form.style.display = 'none';
-        }
-    });
-</script>
+<script src="{% static 'js/curso_detail.js' %}"></script>
 {% endblock %}

@@ -127,3 +127,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+#SESSION_COOKIE_AGE = 900  # cookie de sessão para 15 minutos (900 segundos)
+SESSION_COOKIE_SAMESITE = 'Lax'  # Define o atributo SameSite para o cookie de sessão
+SESSION_COOKIE_SECURE = True  # Garante que o cookie de sessão seja enviado apenas em conexões HTTPS
