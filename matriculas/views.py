@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView
@@ -33,7 +34,8 @@ class MatriculaListView(ListView):
         if data_inicio:
             queryset = queryset.filter(data_matricula__gte=data_inicio)
         if data_fim:
-            queryset = queryset.filter(data_fim__lte=data_fim)
+            data_fim_date = datetime.strptime(data_fim, '%Y-%m-%d').date()
+            queryset = [matricula for matricula in queryset if matricula.data_fim <= data_fim_date]
 
         return queryset
     
