@@ -17,7 +17,7 @@
     <!-- Sidebar -->
     <nav id="sidebar" class="sidebar d-flex flex-column p-3 bg-dark text-white p-3">      
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-        <span class="fs-4">Versátil Dashboard</span>
+        <span class="fs-4">Versátil TI</span>
       </a>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
@@ -37,16 +37,6 @@
             Cursos
           </a>
         </li>
-        {% if user.is_authenticated and not user.is_staff%}
-        <li>
-          <a href="#" class="nav-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-bookmark-fill" viewBox="0 0 16 16">
-              <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/>
-            </svg>
-            Meus Cursos(EM BREVE)
-          </a>
-        </li>
-        {% endif %}
         {% if user.is_staff %}
         <hr>
         <li>
@@ -75,11 +65,10 @@
       <hr>
       <div class="dropdown">
         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg>
           <strong>{{ user.nome }}</strong>
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-          <li><a class="dropdown-item" href="#">Profile(EM BREVE)</a></li>
           <li><a class="dropdown-item" href="{% url 'alterar_senha' %}">Alterar Senha</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
@@ -88,7 +77,6 @@
       {% endif %}
       {% if not user.is_authenticated %}
       <a href="{% url 'login' %}" class="nav-link">
-        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
         <b>Logar</b>
       </a>
       {% endif %}
