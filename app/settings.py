@@ -12,9 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-#0cyxm%$u_-2*^mp^v1wtwc6%vp#1dt&8(_*!l1x)as@#tf5n8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kauansb.pythonanywhere.com','*']
 
 
 # Application definition
@@ -71,9 +71,13 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'kauansb$versatil',  # Substitua pelo nome do seu banco de dados
+        'USER': 'kauansb',         # Substitua pelo nome do usuário do banco de dados
+        'PASSWORD': 'kauan123',    # Substitua pela senha do usuário do banco de dados
+        'HOST': 'kauansb.mysql.pythonanywhere-services.com',               # Substitua pelo host do seu banco de dados, se necessário
+        'PORT': '3306',                    # Substitua pela porta do seu banco de dados, se necessário
     }
 }
 
