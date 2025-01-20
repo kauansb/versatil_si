@@ -97,16 +97,10 @@ class LoginView(View):
                     return redirect('lista_cursos')  # Página para usuários matriculados
                 else:
                     return redirect('home')  # Página padrão para outros casos
-            else:
-                messages.error(request, 'Usuário ou senha incorretos.')
         else:
-            # Exibe erros específicos do formulário
-            for field, errors in login_form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
+            messages.error(request, 'Usuário ou senha incorretos.')
 
         return render(request, 'matriculas/login.html', {'login_form': login_form})
-
 
 
 class LogoutView(View):
