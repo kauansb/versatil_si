@@ -14,6 +14,16 @@ from .models import Matricula
 from django.http import HttpResponseForbidden
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
+class PerfilListView(ListView):
+    model = Matricula
+    template_name = 'usuario/perfil.html'
+    context_object_name = 'matriculas'
+
+    def get_queryset(self):
+        # Retorna apenas as matrículas do usuário autenticado
+        return Matricula.objects.filter(aluno=self.request.user)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class MatriculaListView(ListView):
     model = Matricula
     template_name = 'matriculas/lista_matriculas.html'

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Perfil de {{ request.user.nome }}</h1>
+
+    <h2 class="mt-5">Minhas Informações:</h2>
+    <div class="card mb-4">
+        <div class="card-body text-center">
+            <h3>{{ request.user.nome }}</h3>
+            <p class="text-muted">{{ request.user.email }}</p>
+        </div>
+    </div>
+
+    <h2 class="mt-5">Cursos:</h2>
+
+    {% if matriculas %}
+        <div class="row">
+            {% for matricula in matriculas %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ matricula.curso.nome }}</h5>
+                            <p class="card-text">
+                                <strong>Data de Matrícula:</strong> 
+                                {{ matricula.data_matricula|date:"d/m/Y" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">Você ainda não está matriculado em nenhum curso.</p>
+    {% endif %}
+</div>
+{% endblock %}

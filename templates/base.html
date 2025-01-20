@@ -69,6 +69,7 @@
           <strong>{{ user.nome }}</strong>
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+          <li><a class="dropdown-item" href="{% url 'perfil' %}">Meu Perfil</a></li>
           <li><a class="dropdown-item" href="{% url 'alterar_senha' %}">Alterar Senha</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
