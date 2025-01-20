@@ -14,6 +14,16 @@ from .models import Matricula
 from django.http import HttpResponseForbidden
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
+class PerfilListView(ListView):
+    model = Matricula
+    template_name = 'usuario/perfil.html'
+    context_object_name = 'matriculas'
+
+    def get_queryset(self):
+        # Retorna apenas as matrículas do usuário autenticado
+        return Matricula.objects.filter(aluno=self.request.user)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class MatriculaListView(ListView):
     model = Matricula
     template_name = 'matriculas/lista_matriculas.html'
@@ -97,16 +107,10 @@ class LoginView(View):
                     return redirect('lista_cursos')  # Página para usuários matriculados
                 else:
                     return redirect('home')  # Página padrão para outros casos
-            else:
-                messages.error(request, 'Usuário ou senha incorretos.')
         else:
-            # Exibe erros específicos do formulário
-            for field, errors in login_form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
+            messages.error(request, 'Usuário ou senha incorretos.')
 
         return render(request, 'matriculas/login.html', {'login_form': login_form})
-
 
 
 class LogoutView(View):
