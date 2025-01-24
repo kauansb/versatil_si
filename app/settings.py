@@ -147,9 +147,6 @@ SESSION_COOKIE_SAMESITE = 'Lax'  # Proteção contra CSRF em navegadores
 
 # HTTPS obrigatória
 SECURE_SSL_REDIRECT = True  # Redireciona todo o tráfego HTTP para HTTPS
-SECURE_HSTS_SECONDS = 31536000  # Define HSTS para 1 ano
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Inclui subdomínios no HSTS
-SECURE_HSTS_PRELOAD = True  # Sinaliza para navegadores que o domínio suporta HSTS
 SECURE_BROWSER_XSS_FILTER = True  # Ativa o filtro XSS do navegador
 SECURE_CONTENT_TYPE_NOSNIFF = True  # Impede detecção MIME indevida
 X_FRAME_OPTIONS = 'DENY'  # Evita que o site seja carregado em iframes
