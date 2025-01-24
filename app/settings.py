@@ -1,5 +1,9 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Carregar variáveis de ambiente do arquivo .env
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,12 +13,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#0cyxm%$u_-2*^mp^v1wtwc6%vp#1dt&8(_*!l1x)as@#tf5n8'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['kauansb.pythonanywhere.com','*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 
 # Application definition
@@ -71,15 +75,16 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-        'default': {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kauansb$versatil',  # Substitua pelo nome do seu banco de dados
-        'USER': 'kauansb',         # Substitua pelo nome do usuário do banco de dados
-        'PASSWORD': 'kauan123',    # Substitua pela senha do usuário do banco de dados
-        'HOST': 'kauansb.mysql.pythonanywhere-services.com',               # Substitua pelo host do seu banco de dados, se necessário
-        'PORT': '3306',                    # Substitua pela porta do seu banco de dados, se necessário
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT', '3306'),
     }
 }
+
 
 
 # Password validation
@@ -115,6 +120,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -133,6 +139,17 @@ AUTHENTICATION_BACKENDS = (
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 #SESSION_COOKIE_AGE = 900  # cookie de sessão para 15 minutos (900 segundos)
-SESSION_COOKIE_SAMESITE = 'Lax'  # Define o atributo SameSite para o cookie de sessão
-SESSION_COOKIE_SECURE = True  # Garante que o cookie de sessão seja enviado apenas em conexões HTTPS
-CSRF_COOKIE_SECURE = True  # Garante que o cookie CSRF seja enviado apenas em conexões HTTPS
+
+# Configurações de cookies
+SESSION_COOKIE_SECURE = True  # Cookies só transmitidos via HTTPS
+CSRF_COOKIE_SECURE = True    # CSRF cookies apenas via HTTPS
+SESSION_COOKIE_SAMESITE = 'Lax'  # Proteção contra CSRF em navegadores
+
+# HTTPS obrigatória
+SECURE_SSL_REDIRECT = True  # Redireciona todo o tráfego HTTP para HTTPS
+SECURE_HSTS_SECONDS = 31536000  # Define HSTS para 1 ano
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Inclui subdomínios no HSTS
+SECURE_HSTS_PRELOAD = True  # Sinaliza para navegadores que o domínio suporta HSTS
+SECURE_BROWSER_XSS_FILTER = True  # Ativa o filtro XSS do navegador
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Impede detecção MIME indevida
+X_FRAME_OPTIONS = 'DENY'  # Evita que o site seja carregado em iframes
