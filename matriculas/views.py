@@ -69,16 +69,16 @@ class RegisterView(View):
             messages.success(request, 'Registro realizado com sucesso! O aluno pode usar a senha padrão "senha123" para login.')
             return redirect('register')  # Redireciona para a página de login após o registro
         else:
-            friendly_field_names = {
-                'nome': 'Nome',
-                'email': 'Email',
-                'password1': 'Senha',
-                'curso': 'Cursos'
-            }
-            for field, errors in user_form.errors.items():
-                field_name = friendly_field_names.get(field, field)  # Rótulo amigável ou nome do campo
-                for error in errors:
-                    messages.error(request, f"{field_name}: {error}")
+            #friendly_field_names = {
+            #    'nome': 'Nome',
+            #    'email': 'Email',
+            #    'password1': 'Senha',
+            #    'curso': 'Cursos'
+            #}
+            #for field, errors in user_form.errors.items():
+            #    field_name = friendly_field_names.get(field, field)  # Rótulo amigável ou nome do campo
+            #    for error in errors:
+            #        messages.error(request, f"{field_name}: {error}")
             return render(request, 'matriculas/cadastro.html', {'user_form': user_form})
 
 

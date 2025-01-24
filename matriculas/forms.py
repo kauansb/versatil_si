@@ -4,7 +4,8 @@ from .models import User, Curso, Matricula
 
 
 class AlunoCreationForm(forms.ModelForm):
-    email = forms.EmailField(required=True, label="Email")
+    nome = forms.CharField(label='Nome', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(required=True, label="Email", widget=forms.TextInput(attrs={'class': 'form-control'}))
     curso = forms.ModelMultipleChoiceField(
         queryset=Curso.objects.all(),
         widget=forms.CheckboxSelectMultiple,
@@ -13,8 +14,9 @@ class AlunoCreationForm(forms.ModelForm):
 
     password1 = forms.CharField(
         required=False,  # Torna o campo de senha opcional
-        widget=forms.PasswordInput,
-        label="Senha (opcional)"
+        #widget=forms.PasswordInput,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Senha (opcional)",
     )
 
     class Meta:

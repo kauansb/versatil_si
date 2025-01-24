@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% load widget_tweaks %}
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -8,22 +11,42 @@
                 {% csrf_token %}
                 <h1 class="text-center mb-4">Matricula</h1>
 
-                <!-- Campos do formulário -->
-                {% for field in user_form %}
                 <div class="mb-3">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {% if field.errors %}
+                    {{ user_form.nome.label_tag }}
+                    {{ user_form.nome }}
+                    {% if user_form.nome.errors %}
                     <div class="text-danger small">
-                        <ul class="mb-0">
-                            {% for error in field.errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
+                        {{ user_form.nome.errors }}
                     </div>
                     {% endif %}
                 </div>
-                {% endfor %}
+                <div class="mb-3">
+                    {{ user_form.email.label_tag }}
+                    {{ user_form.email }}
+                    {% if user_form.email.errors %}
+                    <div class="text-danger small">
+                        {{ user_form.email.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ user_form.curso.label_tag }}
+                    {{ user_form.curso }}
+                    {% if user_form.curso.errors %}
+                    <div class="text-danger small">
+                        {{ user_form.curso.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ user_form.password1.label_tag }}
+                    {{ user_form.password1 }}
+                    {% if user_form.password1.errors %}
+                    <div class="text-danger small">
+                        {{ user_form.password1.errors }}
+                    </div>
+                    {% endif %}
+                </div>
 
                 <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
             </form>
