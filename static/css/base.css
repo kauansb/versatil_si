@@ -1,20 +1,51 @@
 /* Garante que o container principal ocupe a altura total */
 .main-container {
+  display: flex;
   min-height: 100vh; /* Ocupa ao menos toda a viewport */
+  overflow: hidden; /* Evita que o conteúdo saia da área visível */
 }
-.sidebar {
-  width: 280px; /* Largura fixa */
+
+/* Sidebar com largura fixa quando expandida */
+#sidebar {
+  width: 240px; /* Largura fixa */
   background-color: #343a40; /* Cor do fundo escuro */
   color: white;
+  transition: width 0.3s ease, transform 0.3s ease; /* Transição suave para largura e movimento */
+  overflow: hidden; /* Esconde qualquer conteúdo extra quando a sidebar for retraída */
 }
-/* Estiliza o botão de recolher para alinhar com o topo */
-.sidebar-toggle {
+
+/* Sidebar retraída com largura 0 */
+#sidebar.collapsed {
+  width: 0; /* Sidebar tem largura 0 quando retraída */
+  transform: translateX(-240px); /* Move a sidebar para fora da tela */
+}
+
+/* Botão para controlar a expansão/retração */
+.toggle-btn {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  z-index: 1030; /* Fica acima do conteúdo */
+  top: 10px;
+  left: 10px;
+  z-index: 999;
 }
+
+/* Conteúdo principal se ajustando ao tamanho da sidebar */
 .content {
   flex-grow: 1; /* Faz o conteúdo principal expandir */
   padding: 20px;
+  transition: margin-left 0.3s ease; /* Animação para o conteúdo se ajustar */
+}
+
+/* Quando a sidebar estiver retraída, o conteúdo vai se expandir */
+#sidebar.collapsed + .content {
+  margin-left: 0; /* Ajusta a margem do conteúdo quando a sidebar estiver retraída */
+}
+
+/* Caso a sidebar esteja expandida, o conteúdo deve ter a margem correta */
+#sidebar:not(.collapsed) + .content {
+  margin-left: 240px; /* Deixa o espaço para a sidebar quando expandida */
+}
+
+#tag{
+  color: white;
+  margin-left: 60px;
 }

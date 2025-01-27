@@ -138,15 +138,15 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-#SESSION_COOKIE_AGE = 900  # cookie de sessão para 15 minutos (900 segundos)
-
-# Configurações de cookies
-SESSION_COOKIE_SECURE = True  # Cookies só transmitidos via HTTPS
-CSRF_COOKIE_SECURE = True    # CSRF cookies apenas via HTTPS
-SESSION_COOKIE_SAMESITE = 'Lax'  # Proteção contra CSRF em navegadores
-
-# HTTPS obrigatória
-SECURE_SSL_REDIRECT = True  # Redireciona todo o tráfego HTTP para HTTPS
-SECURE_BROWSER_XSS_FILTER = True  # Ativa o filtro XSS do navegador
-SECURE_CONTENT_TYPE_NOSNIFF = True  # Impede detecção MIME indevida
-X_FRAME_OPTIONS = 'DENY'  # Evita que o site seja carregado em iframes
+SESSION_COOKIE_SAMESITE = 'Lax'  # Define o atributo SameSite para o cookie de sessão
+if os.getenv('DJANGO_ENV') == 'prod':
+    SECURE_SSL_REDIRECT = True  # Redireciona todas as requisições HTTP para HTTPS
+    SESSION_COOKIE_SECURE = True  # Garante que o cookie de sessão seja enviado apenas em conexões HTTPS
+    CSRF_COOKIE_SECURE = True  # Garante que o cookie CSRF seja enviado apenas em conexões HTTPS
+    SECURE_BROWSER_XSS_FILTER = True  # Ativa o filtro XSS do navegador
+    SECURE_CONTENT_TYPE_NOSNIFF = True  # Impede detecção MIME indevida
+    X_FRAME_OPTIONS = 'DENY'  # Evita que o site seja carregado em iframes
+else:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False

@@ -8,3 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }, 5000);
   });
+
+document.getElementById('toggleSidebar').addEventListener('click', function() {
+  var sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('collapsed');
+});
