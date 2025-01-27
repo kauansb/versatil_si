@@ -44,3 +44,8 @@
 #sidebar:not(.collapsed) + .content {
   margin-left: 240px; /* Deixa o espaço para a sidebar quando expandida */
 }
+
+#tag{
+  color: white;
+  margin-left: 60px;
+}
