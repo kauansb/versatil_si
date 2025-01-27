@@ -12,6 +12,13 @@
 </head>
 <body>
 
+  <!-- Botão para controlar a expansão e retração da sidebar -->
+  <button class="btn btn-primary toggle-btn" id="toggleSidebar">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+      <path d="M2 3h12a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm0 4h12a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1zm0 4h12a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1z"/>
+    </svg>
+  </button>
+
   <div class="d-flex main-container">
 
     <!-- Sidebar -->
@@ -42,7 +49,7 @@
         <li>
           <a href="{% url 'admin:index' %}" class="nav-link" target="_blank">
             <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-            Painel de Administração
+            Painel Admin
           </a>
         </li>
         <li>
