@@ -1,4 +1,6 @@
+import csv
 from django.contrib import admin
+from django.http import HttpResponse
 from matriculas.models import Matricula, User, Curso
 from matriculas.forms import CustomUserCreationForm, CustomUserChangeForm
 
@@ -9,6 +11,20 @@ class MatriculaAdmin(admin.ModelAdmin):
     list_filter = ('curso', 'data_matricula')  # Filtros laterais
     search_fields = ('aluno__nome', 'curso__nome')  # Campos pesquisáveis
     date_hierarchy = 'data_matricula'  # Barra de navegação por datas
+
+    def export_to_csv(self, request, queryset):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="matriculas.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['aluno', 'curso', 'data_matricula', 'ativo']),
+        for matricula in queryset:
+            writer.writerow([matricula.id, matricula.aluno.nome, matricula.curso.nome,
+            matricula.data_matricula, matricula.aluno.is_active,
+            ])
+        return response
+    
+    export_to_csv.short_description = 'Exportar para CSV'
+    actions = [export_to_csv]
 
 
 @admin.register(User)
