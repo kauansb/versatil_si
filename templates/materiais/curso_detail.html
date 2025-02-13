@@ -37,19 +37,19 @@
             {% csrf_token %}
             <div class="mb-3">
                 <label for="id_nome" class="form-label">{{ material_form.nome.label }}</label>
-                {{ material_form.nome|add_class:"form-control" }}
+                {{ material_form.nome }}
             </div>
             <div class="mb-3">
                 <label for="id_descricao" class="form-label">{{ material_form.descricao.label }}</label>
-                {{ material_form.descricao|add_class:"form-control" }}
+                {{ material_form.descricao }}
             </div>
             <div class="mb-3">
                 <label for="id_tipo" class="form-label">{{ material_form.tipo.label }}</label>
-                {{ material_form.tipo|add_class:"form-select" }}
+                {{ material_form.tipo }}
             </div>
             <div class="mb-3">
                 <label for="id_arquivo" class="form-label">{{ material_form.arquivo.label }}</label>
-                {{ material_form.arquivo|add_class:"form-control" }}
+                {{ material_form.arquivo }}
             </div>
             <button type="submit" class="btn btn-primary">Adicionar</button>
         </form>

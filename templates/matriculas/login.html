@@ -13,7 +13,7 @@
                 {% for field in login_form %}
                 <div class="mb-3">
                     {{ field.label_tag }}
-                    {{ field|add_class:"form-control" }}
+                    {{ field }}
                     <div class="invalid-feedback">
                         {{ field.errors }}
                     </div>

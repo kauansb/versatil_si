@@ -31,11 +31,11 @@
                 <!-- Imagem do Curso -->
                 {% if curso.imagem %}
                 <a href="{% url 'curso_detail' slug=curso.slug %}">
-                    <img src="{{ curso.imagem.url }}" class="card-img-top" alt="{{ curso.nome }}">
+                    <img src="{{ curso.imagem.url }}" class="card-img-top" alt="{{ curso.nome }}" loading="lazy">
                 </a>
                 {% else %}
                 <a href="{% url 'curso_detail' slug=curso.slug %}">
-                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="{{ curso.nome }}">
+                    <img src="https://placehold.co/600x400/png" class="card-img-top" alt="{{ curso.nome }}" loading="lazy">
                 </a>
                 {% endif %}
 

@@ -11,7 +11,7 @@ from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
 from .forms import AlunoCreationForm, EmailAuthenticationForm
 from .models import Matricula
-from django.http import HttpResponseForbidden
+
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class PerfilListView(ListView):
@@ -54,6 +54,7 @@ class MatriculaListView(ListView):
             return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
         return super().dispatch(request, *args, **kwargs)
 
+
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(permission_required('matriculas.add_matricula', raise_exception=True), name='dispatch')
 class RegisterView(View):
@@ -67,7 +68,7 @@ class RegisterView(View):
         if user_form.is_valid():
             user_form.save()
             messages.success(request, 'Registro realizado com sucesso! O aluno pode usar a senha padrão "senha123" para login.')
-            return redirect('register')  # Redireciona para a página de login após o registro
+            return redirect('register')
         else:
             #friendly_field_names = {
             #    'nome': 'Nome',
@@ -80,8 +81,6 @@ class RegisterView(View):
             #    for error in errors:
             #        messages.error(request, f"{field_name}: {error}")
             return render(request, 'matriculas/cadastro.html', {'user_form': user_form})
-
-
 
 class LoginView(View):
     def get(self, request):
@@ -112,9 +111,7 @@ class LoginView(View):
 
         return render(request, 'matriculas/login.html', {'login_form': login_form})
 
-
 class LogoutView(View):
-
     def get(self, request):
         logout(request)
         messages.success(request, 'Logout efetuado com sucesso!')

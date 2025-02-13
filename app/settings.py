@@ -132,12 +132,14 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+#Cookies
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_SAMESITE = 'Lax'  # Define o atributo SameSite para o cookie de sessão
+SESSION_COOKIE_SAMESITE = 'Lax'
 if os.getenv('DJANGO_ENV') == 'prod':
     SECURE_SSL_REDIRECT = True  # Redireciona todas as requisições HTTP para HTTPS
     SESSION_COOKIE_SECURE = True  # Garante que o cookie de sessão seja enviado apenas em conexões HTTPS
     CSRF_COOKIE_SECURE = True  # Garante que o cookie CSRF seja enviado apenas em conexões HTTPS
+    SESSION_COOKIE_AGE = 1209600  # 2 semanas
 else:
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False

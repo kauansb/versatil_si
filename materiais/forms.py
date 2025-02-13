@@ -17,6 +17,20 @@ class CursoForm(forms.ModelForm):
 
 
 class MaterialForm(forms.ModelForm):
+    nome = forms.CharField(label='Nome',
+                           max_length=255,
+                           widget=forms.TextInput(attrs={'class': 'form-control'}),
+                           required=True)
+    descricao = forms.CharField(label='Descrição',
+                                widget=forms.Textarea(attrs={'class': 'form-control'}),
+                                required=False)
+    tipo = forms.ChoiceField(label='Tipo',
+                             choices=Material.TIPO_MATERIAL_CHOICES,
+                             widget=forms.Select(attrs={'class': 'form-control'}))
+    arquivo = forms.FileField(label='Arquivo',
+                              widget=forms.FileInput(attrs={'class': 'form-control'}),
+                              required=True)
+
     class Meta:
         model = Material
         fields = ['nome', 'descricao', 'tipo', 'arquivo']

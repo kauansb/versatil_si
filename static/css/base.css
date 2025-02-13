@@ -5,7 +5,6 @@
   overflow: hidden; /* Evita que o conteúdo saia da área visível */
 }
 
-/* Sidebar com largura fixa quando expandida */
 #sidebar {
   width: 240px; /* Largura fixa */
   background-color: #343a40; /* Cor do fundo escuro */
@@ -14,7 +13,6 @@
   overflow: hidden; /* Esconde qualquer conteúdo extra quando a sidebar for retraída */
 }
 
-/* Sidebar retraída com largura 0 */
 #sidebar.collapsed {
   width: 0; /* Sidebar tem largura 0 quando retraída */
   transform: translateX(-240px); /* Move a sidebar para fora da tela */

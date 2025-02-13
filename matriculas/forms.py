@@ -4,9 +4,17 @@ from .models import User, Curso, Matricula
 
 
 class AlunoCreationForm(forms.ModelForm):
-    nome = forms.CharField(label='Nome', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    email = forms.EmailField(required=True, label="Email", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    nome = forms.CharField(
+        required=True,
+        label='Nome', 
+        max_length=100, 
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(
+        required=True, 
+        label="Email", 
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
     curso = forms.ModelMultipleChoiceField(
+        required=True,
         queryset=Curso.objects.all(),
         widget=forms.CheckboxSelectMultiple,
         label="Cursos"
@@ -14,9 +22,9 @@ class AlunoCreationForm(forms.ModelForm):
 
     password1 = forms.CharField(
         required=False,  # Torna o campo de senha opcional
-        #widget=forms.PasswordInput,
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
         label="Senha (opcional)",
+        strip=False,
     )
 
     class Meta:
@@ -51,23 +59,26 @@ class AlunoCreationForm(forms.ModelForm):
 
 
 class EmailAuthenticationForm(AuthenticationForm):
-    username = forms.EmailField(label="Email")  # Usa o campo de email como username
+    username = forms.EmailField(label="Email",
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(label="Senha",
+        required=True,
+        strip=False,
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     
+
     def confirm_login_allowed(self, user):
         if not user.is_active:
             raise forms.ValidationError("Esta conta está inativa.", code="inactive")
 
-        # Permite login para usuários staff ou admin
         if user.is_staff or user.is_superuser:
             return
         
-        # Permite login para usuários com matrícula
         if Matricula.objects.filter(aluno=user).exists():
             return
         
-        # Caso especial: usuários sem matrícula
-        # Você pode adicionar lógica aqui para verificar outros critérios
-        if getattr(user, "is_guest", False):  # Exemplo: campo is_guest
+        if getattr(user, "is_guest", False):
             return
         
         raise forms.ValidationError("Você não está matriculado em nenhum curso ou autorizado a acessar.", code="no_matricula")

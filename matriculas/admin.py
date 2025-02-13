@@ -5,18 +5,25 @@ from matriculas.models import Matricula, User, Curso
 from matriculas.forms import CustomUserCreationForm, CustomUserChangeForm
 
 
+@admin.register(Curso)
+class CursoAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'duracao_meses')  # Adicionado `duracao_meses` à lista
+    search_fields = ('nome',)  # Permite pesquisar pelo nome do curso
+    list_filter = ('duracao_meses',)  # Filtro lateral para duração
+
+
 @admin.register(Matricula)
 class MatriculaAdmin(admin.ModelAdmin):
-    list_display = ('aluno', 'curso', 'data_matricula')  # Campos exibidos na lista
+    list_display = ('aluno', 'curso', 'data_matricula')
     list_filter = ('curso', 'data_matricula')  # Filtros laterais
-    search_fields = ('aluno__nome', 'curso__nome')  # Campos pesquisáveis
-    date_hierarchy = 'data_matricula'  # Barra de navegação por datas
+    search_fields = ('aluno__nome', 'curso__nome')
+    date_hierarchy = 'data_matricula'  # Filtro por data
 
     def export_to_csv(self, request, queryset):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="matriculas.csv"'
         writer = csv.writer(response)
-        writer.writerow(['aluno', 'curso', 'data_matricula', 'ativo']),
+        writer.writerow(['id', 'aluno', 'curso', 'data_matricula', 'ativo']),
         for matricula in queryset:
             writer.writerow([matricula.id, matricula.aluno.nome, matricula.curso.nome,
             matricula.data_matricula, matricula.aluno.is_active,
@@ -48,10 +55,3 @@ class UserAdmin(admin.ModelAdmin):
         }),
     )
     readonly_fields = ('last_login',)  # Exibe o último login como campo somente leitura
-
-
-@admin.register(Curso)
-class CursoAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'duracao_meses')  # Adicionado `duracao_meses` à lista
-    search_fields = ('nome',)  # Permite pesquisar pelo nome do curso
-    list_filter = ('duracao_meses',)  # Filtro lateral para duração
